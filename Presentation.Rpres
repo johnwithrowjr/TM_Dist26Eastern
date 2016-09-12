@@ -22,9 +22,7 @@ The Approach - Historical Data
 - Compiling all those probabilities together, we can calculate probabilities that each area will have a total of zero, 1, 2, 3, or 4 or more clubs that become Distinguished.  These are shown in pie charts, one for each area.
 
 - Of course, as the year progresses, and our clubs begin to mark their successes, then these probabilities can change!  That's where the
-    lower part of the page comes in!  Note that there are seven tabs, one for each area.  In each area, we see rows of 10 boxes, one row for
-    each club.  You can see the club name to the left.  In each box, NA means that it is currently not known whether or not the club will
-    achieve this objective this year.  Values of 1 and 0 indicate certain success or failure.
+    lower part of the page comes in!  Note that there are seven tabs, one for each area.  For each club, we see rows of 10 boxes.  In each box, values of 1 and 0 indicate certain success or failure. NA indicates unknown.
 
 The Approach - Updating Success
 ========================================================
