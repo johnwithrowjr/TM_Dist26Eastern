@@ -136,29 +136,30 @@ areaCalc <- function(x)
 
 ui <- shinyUI(fluidPage(
   titlePanel("Toastmasters Division 26 Eastern Achievement Monitoring"),
-  h3("Achievement Probabilities (Updates Current As of 21 Sept 2016)"),
-  h4("For instructions, see the bottom of this page!"),
+  #h3("Achievement Probabilities (Updates Current As of 21 Sept 2016)"),
+  #4("For instructions, see the bottom of this page!"),
 
   #Below are the panels for showing the pie charts.
   
-    fluidRow(hr(),
-      column(3,plotOutput("plotE01")),
-      column(3,plotOutput("plotE02")),
-      column(3,plotOutput("plotE03")),
-      column(3,plotOutput("plotE04"))
-    ),
-    fluidRow(hr(),
-      column(3,plotOutput("plotE05")),
-      column(3,plotOutput("plotE06")),
-      column(3,plotOutput("plotE07")),
-      hr()
-    ),
+    #fluidRow(hr(),
+      #column(3,plotOutput("plotE01")),
+      #column(3,plotOutput("plotE02")),
+      #column(3,plotOutput("plotE03")),
+      #column(3,plotOutput("plotE04"))
+    #),
+    #fluidRow(hr(),
+      #column(3,plotOutput("plotE05")),
+      #column(3,plotOutput("plotE06")),
+      #column(3,plotOutput("plotE07")),
+      #hr()
+    #),
   
   #Below we now have all the panels for user input.
   
   h3("Area Accomplishment Tracking (1-Success, 0-Failure, NA-Unknown for now)"),
   tabsetPanel(type = "tabs", 
     tabPanel("Area E01",
+      fluidRow(hr(),column(3,plotOutput("plotE01")),column(6,h3("Probability of Distinguished"),textOutput("textE01a"),h3("Probability of Select Distinguished"),textOutput("textE01b"))),
       fluidRow(
         column(2, ""),
         column(1, h5("1", align="center")),
@@ -229,6 +230,7 @@ ui <- shinyUI(fluidPage(
       )
     ),
     tabPanel("Area E02",
+             fluidRow(hr(),column(3,plotOutput("plotE02")),column(6,h3("Probability of Distinguished"),textOutput("textE02a"),h3("Probability of Select Distinguished"),textOutput("textE02b"))),
       fluidRow(
         column(2, ""),
         column(1, h5("1", align="center")),
@@ -299,6 +301,7 @@ ui <- shinyUI(fluidPage(
       )
     ),
     tabPanel("Area E03",
+             fluidRow(hr(),column(3,plotOutput("plotE03")),column(6,h3("Probability of Distinguished"),textOutput("textE03a"),h3("Probability of Select Distinguished"),textOutput("textE03b"))),
       fluidRow(
         column(2, ""),
         column(1, h5("1", align="center")),
@@ -369,6 +372,7 @@ ui <- shinyUI(fluidPage(
       )              
     ),
     tabPanel("Area E04",
+             fluidRow(hr(),column(3,plotOutput("plotE04")),column(6,h3("Probability of Distinguished"),textOutput("textE04a"),h3("Probability of Select Distinguished"),textOutput("textE04b"))),
       fluidRow(
         column(2, ""),
         column(1, h5("1", align="center")),
@@ -439,6 +443,7 @@ ui <- shinyUI(fluidPage(
       )
     ),
     tabPanel("Area E05",
+             fluidRow(hr(),column(3,plotOutput("plotE05")),column(6,h3("Probability of Distinguished"),textOutput("textE05a"),h3("Probability of Select Distinguished"),textOutput("textE05b"))),
       fluidRow(
         column(2, ""),
         column(1, h5("1", align="center")),
@@ -509,6 +514,7 @@ ui <- shinyUI(fluidPage(
       )
     ),
     tabPanel("Area E06",
+             fluidRow(hr(),column(3,plotOutput("plotE06")),column(6,h3("Probability of Distinguished"),textOutput("textE06a"),h3("Probability of Select Distinguished"),textOutput("textE06b"))),
       fluidRow(
         column(2, ""),
         column(1, h5("1", align="center")),
@@ -589,6 +595,7 @@ ui <- shinyUI(fluidPage(
       )
     ),
     tabPanel("Area E07",
+             fluidRow(hr(),column(3,plotOutput("plotE07")),column(6,h3("Probability of Distinguished"),textOutput("textE07a"),h3("Probability of Select Distinguished"),textOutput("textE07b"))),
       fluidRow(
         column(2, ""),
         column(1, h5("1", align="center")),
@@ -692,6 +699,28 @@ callPieChart <- function(x,mainTitle){
   text(0,-1.75,paste("(out of ",n-1,")",sep=""))
 }
 
+getStat1 <- function(x){
+  n <- length(x)
+  if (n==5) { 
+    result1 = 100*(x[4]+x[5]) 
+  }
+  if (n==6) {
+    result1 = 100*(x[4]+x[5]+x[6])
+  }
+  result1
+}
+
+getStat2 <- function(x){
+  n <- length(x)
+  if (n==5) { 
+    result2 = 100*x[5]
+  }
+  if (n==6) {
+    result2 = 100*(x[5]+x[6])
+  }
+  result2
+}
+
 server <- shinyServer(function(input, output) {
   
   #This portion of the code controls the initial creation of the pie charts, as well as the subsequent updating of the pie charts
@@ -703,6 +732,8 @@ server <- shinyServer(function(input, output) {
                           c(input$e01_3_1,input$e01_3_2,input$e01_3_3,input$e01_3_4,input$e01_3_5,input$e01_3_6,input$e01_3_7,input$e01_3_8,input$e01_3_9,input$e01_3_10),
                           c(input$e01_4_1,input$e01_4_2,input$e01_4_3,input$e01_4_4,input$e01_4_5,input$e01_4_6,input$e01_4_7,input$e01_4_8,input$e01_4_9,input$e01_4_10)) })
   output$plotE01 <- renderPlot({ callPieChart(areaCalc(clubsCalc(clubNum01,e01())),"Probabilities for Area E01") })
+  output$textE01a <- renderText({ getStat1(areaCalc(clubsCalc(clubNum01,e01()))) })  
+  output$textE01b <- renderText({ getStat2(areaCalc(clubsCalc(clubNum01,e01()))) })  
   
   #Area E02
   e02 <- reactive({ rbind(c(input$e02_1_1,input$e02_1_2,input$e02_1_3,input$e02_1_4,input$e02_1_5,input$e02_1_6,input$e02_1_7,input$e02_1_8,input$e02_1_9,input$e02_1_10),
@@ -710,13 +741,17 @@ server <- shinyServer(function(input, output) {
                           c(input$e02_3_1,input$e02_3_2,input$e02_3_3,input$e02_3_4,input$e02_3_5,input$e02_3_6,input$e02_3_7,input$e02_3_8,input$e02_3_9,input$e02_3_10),
                           c(input$e02_4_1,input$e02_4_2,input$e02_4_3,input$e02_4_4,input$e02_4_5,input$e02_4_6,input$e02_4_7,input$e02_4_8,input$e02_4_9,input$e02_4_10)) })
   output$plotE02 <- renderPlot({ callPieChart(areaCalc(clubsCalc(clubNum02,e02())),"Probabilities for Area E02") })
-
+  output$textE02a <- renderText({ getStat1(areaCalc(clubsCalc(clubNum02,e02()))) })  
+  output$textE02b <- renderText({ getStat2(areaCalc(clubsCalc(clubNum02,e02()))) })  
+  
   #Area E03
   e03 <- reactive({ rbind(c(input$e03_1_1,input$e03_1_2,input$e03_1_3,input$e03_1_4,input$e03_1_5,input$e03_1_6,input$e03_1_7,input$e03_1_8,input$e03_1_9,input$e03_1_10),
                           c(input$e03_2_1,input$e03_2_2,input$e03_2_3,input$e03_2_4,input$e03_2_5,input$e03_2_6,input$e03_2_7,input$e03_2_8,input$e03_2_9,input$e03_2_10),
                           c(input$e03_3_1,input$e03_3_2,input$e03_3_3,input$e03_3_4,input$e03_3_5,input$e03_3_6,input$e03_3_7,input$e03_3_8,input$e03_3_9,input$e03_3_10),
                           c(input$e03_4_1,input$e03_4_2,input$e03_4_3,input$e03_4_4,input$e03_4_5,input$e03_4_6,input$e03_4_7,input$e03_4_8,input$e03_4_9,input$e03_4_10)) })
   output$plotE03 <- renderPlot({ callPieChart(areaCalc(clubsCalc(clubNum03,e03())),"Probabilities for Area E03") })
+  output$textE03a <- renderText({ getStat1(areaCalc(clubsCalc(clubNum03,e03()))) })  
+  output$textE03b <- renderText({ getStat2(areaCalc(clubsCalc(clubNum03,e03()))) })  
   
   #Area E04
   e04 <- reactive({ rbind(c(input$e04_1_1,input$e04_1_2,input$e04_1_3,input$e04_1_4,input$e04_1_5,input$e04_1_6,input$e04_1_7,input$e04_1_8,input$e04_1_9,input$e04_1_10),
@@ -724,6 +759,8 @@ server <- shinyServer(function(input, output) {
                           c(input$e04_3_1,input$e04_3_2,input$e04_3_3,input$e04_3_4,input$e04_3_5,input$e04_3_6,input$e04_3_7,input$e04_3_8,input$e04_3_9,input$e04_3_10),
                           c(input$e04_4_1,input$e04_4_2,input$e04_4_3,input$e04_4_4,input$e04_4_5,input$e04_4_6,input$e04_4_7,input$e04_4_8,input$e04_4_9,input$e04_4_10)) })
   output$plotE04 <- renderPlot({ callPieChart(areaCalc(clubsCalc(clubNum04,e04())),"Probabilities for Area E04") })
+  output$textE04a <- renderText({ getStat1(areaCalc(clubsCalc(clubNum04,e04()))) })  
+  output$textE04b <- renderText({ getStat2(areaCalc(clubsCalc(clubNum04,e04()))) })  
   
   #Area E05
   e05 <- reactive({ rbind(c(input$e05_1_1,input$e05_1_2,input$e05_1_3,input$e05_1_4,input$e05_1_5,input$e05_1_6,input$e05_1_7,input$e05_1_8,input$e05_1_9,input$e05_1_10),
@@ -731,6 +768,8 @@ server <- shinyServer(function(input, output) {
                           c(input$e05_3_1,input$e05_3_2,input$e05_3_3,input$e05_3_4,input$e05_3_5,input$e05_3_6,input$e05_3_7,input$e05_3_8,input$e05_3_9,input$e05_3_10),
                           c(input$e05_4_1,input$e05_4_2,input$e05_4_3,input$e05_4_4,input$e05_4_5,input$e05_4_6,input$e05_4_7,input$e05_4_8,input$e05_4_9,input$e05_4_10)) })
   output$plotE05 <- renderPlot({ callPieChart(areaCalc(clubsCalc(clubNum05,e05())),"Probabilities for Area E05") })
+  output$textE05a <- renderText({ getStat1(areaCalc(clubsCalc(clubNum05,e05()))) })  
+  output$textE05b <- renderText({ getStat2(areaCalc(clubsCalc(clubNum05,e05()))) })  
   
   #Area E06
   e06 <- reactive({ rbind(c(input$e06_1_1,input$e06_1_2,input$e06_1_3,input$e06_1_4,input$e06_1_5,input$e06_1_6,input$e06_1_7,input$e06_1_8,input$e06_1_9,input$e06_1_10),
@@ -739,6 +778,8 @@ server <- shinyServer(function(input, output) {
                           c(input$e06_3_1,input$e06_4_2,input$e06_4_3,input$e06_4_4,input$e06_4_5,input$e06_4_6,input$e06_4_7,input$e06_4_8,input$e06_4_9,input$e06_4_10),
                           c(input$e06_4_1,input$e06_5_2,input$e06_5_3,input$e06_5_4,input$e06_5_5,input$e06_5_6,input$e06_5_7,input$e06_5_8,input$e06_5_9,input$e06_5_10)) })
   output$plotE06 <- renderPlot({ callPieChart(areaCalc(clubsCalc(clubNum06,e06())),"Probabilities for Area E06") })
+  output$textE06a <- renderText({ getStat1(areaCalc(clubsCalc(clubNum06,e06()))) })  
+  output$textE06b <- renderText({ getStat2(areaCalc(clubsCalc(clubNum06,e06()))) })  
   
   #Area E07
   e07 <- reactive({ rbind(c(input$e07_1_1,input$e07_1_2,input$e07_1_3,input$e07_1_4,input$e07_1_5,input$e07_1_6,input$e07_1_7,input$e07_1_8,input$e07_1_9,input$e07_1_10),
@@ -746,7 +787,8 @@ server <- shinyServer(function(input, output) {
                           c(input$e07_3_1,input$e07_3_2,input$e07_3_3,input$e07_3_4,input$e07_3_5,input$e07_3_6,input$e07_3_7,input$e07_3_8,input$e07_3_9,input$e07_3_10),
                           c(input$e07_4_1,input$e07_4_2,input$e07_4_3,input$e07_4_4,input$e07_4_5,input$e07_4_6,input$e07_4_7,input$e07_4_8,input$e07_4_9,input$e07_4_10)) })
   output$plotE07 <- renderPlot({ callPieChart(areaCalc(clubsCalc(clubNum07,e07())),"Probabilities for Area E07") })
-
+  output$textE07a <- renderText({ getStat1(areaCalc(clubsCalc(clubNum07,e07()))) })  
+  output$textE07b <- renderText({ getStat2(areaCalc(clubsCalc(clubNum07,e07()))) })  
 })
 
 shinyApp(ui = ui, server = server)

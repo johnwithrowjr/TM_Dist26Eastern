@@ -2,8 +2,8 @@ name: TM_Dist26Eastern
 account: johnwithrowjr
 server: shinyapps.io
 appId: 125193
-bundleId: 555061
+bundleId: 565960
 url: https://johnwithrowjr.shinyapps.io/TM_Dist26Eastern/
-when: 1473662433.06408
+when: 1474612969.28225
 asMultiple: FALSE
 asStatic: FALSE
